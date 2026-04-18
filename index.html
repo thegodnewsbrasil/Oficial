@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta property="og:title" content="E-Book Gratuito — Evangelismo Prático | Osvaldo Alves" />
+  <meta property="og:description" content="Siga no Instagram e baixe gratuitamente o E-Book Evangelismo Prático de Osvaldo Alves." />
+  <meta property="og:image" content="https://i.imgur.com/5TAasFR.jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://thegodnewsbrasil.github.io/Oficial/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="E-Book Gratuito — Evangelismo Prático" />
+  <meta name="twitter:description" content="Siga no Instagram e baixe gratuitamente o E-Book Evangelismo Prático de Osvaldo Alves." />
+  <meta name="twitter:image" content="https://i.imgur.com/5TAasFR.jpeg" />
   <title>Osvaldo Alves — E-Book Grátis</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet" />
   <style>
@@ -400,10 +411,43 @@
     }
   }
 
-  function toggleCheck() {
-    var cb = document.getElementById('followedCheck');
-    cb.checked = !cb.checked;
+  // Atualiza o botão em tempo real conforme preenche
+  function checkFields() {
+    var cb     = document.getElementById('followedCheck');
+    var ig     = document.getElementById('fieldIg').value.trim();
+    var name   = document.getElementById('fieldName').value.trim();
+    var email  = document.getElementById('fieldEmail').value.trim();
+    var source = document.getElementById('fieldSource').value;
+    var btn    = document.getElementById('pdfBtn');
+    var lock   = document.getElementById('lockIcon');
+
+    if (cb.checked && ig && name && email && email.includes('@') && source) {
+      btn.classList.add('unlocked');
+      btn.style.pointerEvents = 'all';
+      btn.style.cursor = 'pointer';
+      lock.textContent = '📄';
+    } else {
+      if (!submitted) {
+        btn.classList.remove('unlocked');
+        btn.style.pointerEvents = 'none';
+        btn.style.cursor = 'not-allowed';
+        lock.textContent = '🔒';
+      }
+    }
   }
+
+  // Monitora todos os campos em tempo real
+  document.addEventListener('DOMContentLoaded', function() {
+    var fields = ['fieldIg', 'fieldName', 'fieldEmail', 'fieldSource', 'followedCheck'];
+    fields.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', checkFields);
+        el.addEventListener('change', checkFields);
+        el.addEventListener('click', checkFields);
+      }
+    });
+  });
 
   function handleDownload(e) {
     e.preventDefault();
@@ -418,6 +462,9 @@
 
     if (!cb.checked || !ig || !name || !email || !email.includes('@') || !source) {
       err.classList.add('visible');
+      err.textContent = 'Preencha todos os campos, confirme que está seguindo e tente novamente.';
+      // Scroll até o erro
+      err.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
     err.classList.remove('visible');
@@ -441,9 +488,11 @@
     form.submit();
 
     submitted = true;
+    document.getElementById('errorMsg').classList.remove('visible');
     document.getElementById('successMsg').classList.add('visible');
     var btn = document.getElementById('pdfBtn');
     btn.classList.add('unlocked');
+    btn.style.pointerEvents = 'all';
     btn.href = PDF_LINK;
     document.getElementById('lockIcon').textContent = '📄';
     window.open(PDF_LINK, '_blank');
