@@ -309,10 +309,10 @@
     <div class="form-title">E-BOOK EXCLUSIVO</div>
     <div class="form-desc">Preencha os dados abaixo para liberar o download gratuito.</div>
 
-    <div class="confirm-row" onclick="toggleCheck()">
-      <input type="checkbox" id="followedCheck" />
-      <label class="confirm-label" for="followedCheck"><strong>Já estou seguindo @osvaldoalvesss</strong> no Instagram e quero receber o E-Book gratuito.</label>
-    </div>
+    <label class="confirm-row" for="followedCheck">
+      <input type="checkbox" id="followedCheck" onclick="event.stopPropagation()" />
+      <span class="confirm-label"><strong>Já estou seguindo @osvaldoalvesss</strong> no Instagram e quero receber o E-Book gratuito.</span>
+    </label>
 
     <div class="field-group">
       <label class="field-label">@ do seu Instagram</label>
