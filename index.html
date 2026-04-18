@@ -394,11 +394,7 @@
 
 </div>
 <script>
-  var FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSf52WzwdQjOsZ0poL8DQbYqu0Iygn5xI-R_2mZ2dHF0asP7jg/formResponse';
-  var ENTRY_IG     = 'entry.864912625';
-  var ENTRY_NAME   = 'entry.1659261765';
-  var ENTRY_EMAIL  = 'entry.1738386010';
-  var ENTRY_SOURCE = 'entry.1208042410';
+  // Formspree integration
   var PDF_LINK     = 'https://drive.google.com/file/d/1rQsoloBoehgOLUolwxzSOxiK9JCwLa5o/view?usp=drivesdk';
   var submitted    = false;
 
@@ -469,24 +465,6 @@
     }
     err.classList.remove('visible');
 
-    var iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.name = 'hf';
-    document.body.appendChild(iframe);
-
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = FORM_ACTION;
-    form.target = 'hf';
-
-    [[ENTRY_IG,ig],[ENTRY_NAME,name],[ENTRY_EMAIL,email],[ENTRY_SOURCE,source]].forEach(function(pair){
-      var inp = document.createElement('input');
-      inp.type = 'hidden'; inp.name = pair[0]; inp.value = pair[1];
-      form.appendChild(inp);
-    });
-    document.body.appendChild(form);
-    form.submit();
-
     submitted = true;
     document.getElementById('errorMsg').classList.remove('visible');
     document.getElementById('successMsg').classList.add('visible');
@@ -495,6 +473,23 @@
     btn.style.pointerEvents = 'all';
     btn.href = PDF_LINK;
     document.getElementById('lockIcon').textContent = '📄';
+
+    // Envia para Formspree via fetch
+    fetch('https://formspree.io/f/xdayzowo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        instagram: ig,
+        nome: name,
+        email: email,
+        como_soube: source
+      })
+    }).then(function(res) {
+      console.log('Formspree:', res.status);
+    }).catch(function(err) {
+      console.log('Erro Formspree:', err);
+    });
+
     window.open(PDF_LINK, '_blank');
   }
 </script>
